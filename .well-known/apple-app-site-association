@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "REPLACE_WITH_TEAM_ID.com.veefyed.veefyed",
+        "paths": [
+          "/product/*",
+          "/p/*"
+        ]
+      }
+    ]
+  }
+}

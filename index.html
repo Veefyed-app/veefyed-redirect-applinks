@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veefyed - Opening Product...</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      .logo {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        color: #667eea;
+        margin-bottom: 10px;
+      }
+
+      .tagline {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        margin: 30px auto;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      h1 {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 15px;
+      }
+
+      p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .btn {
+        padding: 15px 30px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        display: inline-block;
+      }
+
+      .btn-primary {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #5568d3;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: #f3f3f3;
+        color: #333;
+      }
+
+      .btn-secondary:hover {
+        background: #e0e0e0;
+      }
+
+      .store-badges {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+
+      .store-badge {
+        height: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">VEEFYED</div>
+      <div class="tagline">AUTHENTIFY COSMETICS</div>
+
+      <div class="spinner"></div>
+
+      <h1>Opening in Veefyed App...</h1>
+      <p id="message">Redirecting you to the product details...</p>
+
+      <div class="buttons">
+        <a href="#" id="openApp" class="btn btn-primary">Open in App</a>
+        <a
+          href="#"
+          id="downloadApp"
+          class="btn btn-secondary"
+          style="display: none"
+          >Download Veefyed App</a
+        >
+      </div>
+
+      <div class="store-badges" id="storeBadges" style="display: none">
+        <a
+          href="https://play.google.com/store/apps/details?id=com.veefyed.veefyed"
+          target="_blank"
+        >
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+            alt="Get it on Google Play"
+            class="store-badge"
+          />
+        </a>
+        <a
+          href="https://apps.apple.com/app/veefyed/id123456789"
+          target="_blank"
+        >
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
+            alt="Download on App Store"
+            class="store-badge"
+          />
+        </a>
+      </div>
+    </div>
+
+    <script>
+      // Get the current URL path and query parameters
+      const urlPath = window.location.pathname;
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // Extract product ID from URL
+      let productId = null;
+      let productName = urlParams.get("name") || "this product";
+
+      if (urlPath.startsWith("/product/")) {
+        productId = urlPath.replace("/product/", "").split("?")[0];
+      } else if (urlPath.startsWith("/p/")) {
+        productId = urlPath.replace("/p/", "").split("?")[0];
+      } else if (urlParams.has("productId")) {
+        productId = urlParams.get("productId");
+      }
+
+      // Construct deep link URLs
+      const customSchemeUrl = `veefyed://product/${productId}`;
+      const httpsUrl = `https://veefyed.com/product/${productId}`;
+
+      // Update message
+      document.getElementById(
+        "message"
+      ).textContent = `Opening ${decodeURIComponent(productName)}...`;
+
+      // Function to attempt opening the app
+      function attemptOpenApp() {
+        // Try custom scheme first
+        window.location.href = customSchemeUrl;
+
+        // Set a timeout to show download options if app doesn't open
+        setTimeout(() => {
+          document.getElementById("message").textContent =
+            "Don't have the Veefyed app yet?";
+          document.getElementById("openApp").style.display = "none";
+          document.getElementById("downloadApp").style.display = "inline-block";
+          document.getElementById("storeBadges").style.display = "flex";
+        }, 2000);
+      }
+
+      // Set up button click handlers
+      document.getElementById("openApp").addEventListener("click", (e) => {
+        e.preventDefault();
+        attemptOpenApp();
+      });
+
+      document.getElementById("downloadApp").addEventListener("click", (e) => {
+        e.preventDefault();
+        // Detect platform and redirect accordingly
+        const userAgent =
+          navigator.userAgent || navigator.vendor || window.opera;
+
+        if (/android/i.test(userAgent)) {
+          window.location.href =
+            "https://play.google.com/store/apps/details?id=com.veefyed.veefyed";
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          window.location.href =
+            "https://apps.apple.com/app/veefyed/id123456789";
+        } else {
+          // Desktop or unknown - show both options
+          document.getElementById("storeBadges").style.display = "flex";
+        }
+      });
+
+      // Automatically attempt to open app on page load
+      if (productId) {
+        setTimeout(attemptOpenApp, 500);
+      } else {
+        document.getElementById("message").textContent = "Invalid product link";
+        document.querySelector(".spinner").style.display = "none";
+      }
+
+      // Handle visibility change (user comes back to tab)
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+          // User came back, app probably didn't open
+          setTimeout(() => {
+            if (document.getElementById("openApp").style.display !== "none") {
+              document.getElementById("message").textContent =
+                "Having trouble opening the app?";
+              document.getElementById("downloadApp").style.display =
+                "inline-block";
+              document.getElementById("storeBadges").style.display = "flex";
+            }
+          }, 500);
+        }
+      });
+    </script>
+  </body>
+</html>
