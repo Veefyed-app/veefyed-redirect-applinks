@@ -1,0 +1,27 @@
+services:
+  # Static site for deep link redirects
+  - type: web
+    name: veefyed-web
+    runtime: static
+    buildCommand: echo "Static site - no build needed"
+    staticPublishPath: web
+    routes:
+      - type: rewrite
+        source: /product/*
+        destination: /index.html
+      - type: rewrite
+        source: /p/*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+      - path: /.well-known/*
+        name: Cache-Control
+        value: public, max-age=3600
+      - path: /.well-known/assetlinks.json
+        name: Content-Type
+        value: application/json
+      - path: /.well-known/apple-app-site-association
+        name: Content-Type
+        value: application/json
