@@ -2,9 +2,11 @@
   {
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
-      "namespace": "android_app",
-      "package_name": "com.veefyed.veefyed",
-      "sha256_cert_fingerprints": ["REPLACE_WITH_YOUR_SHA256_FINGERPRINT"]
+      "namespace": "veefyed.app",
+      "package_name": "com.veefyed.mobileapp",
+      "sha256_cert_fingerprints": [
+        "93:46:C5:DB:C8:02:F1:92:87:08:BF:16:DF:70:D9:44:16:93:83:4D:F1:A6:9B:ED:D9:C3:4F:F4:C2:9D:65:38"
+      ]
     }
   }
 ]
